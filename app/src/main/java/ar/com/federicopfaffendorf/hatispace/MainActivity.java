@@ -1,15 +1,18 @@
 package ar.com.federicopfaffendorf.hatispace;
 
+// import android.util.Log;
+
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.app.ProgressDialog;
 
 public class MainActivity extends AppCompatActivity {
 
-    static String MainURL = "http://192.168.1.119:3000";
     private WebView myWebView;
 
     @Override
@@ -17,37 +20,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         myWebView = findViewById(R.id.webview);
-        myWebView.setWebViewClient(new WebViewClient());
-        myWebView.loadUrl(MainURL);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String sharedServer = preferences.getString("server", "DEFAULT");
+        if (sharedServer == "DEFAULT") sharedServer = "http://hati.space/app";
+        loadServer(sharedServer);
+    }
+
+    public void loadServer(String server) {
+        final ProgressDialog pd = ProgressDialog.show(this, "", "Connecting to server ...",true);
+        myWebView.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                if(pd!=null && pd.isShowing()) pd.dismiss();
+            }
+        });
+        myWebView.loadUrl(server);
         myWebView.getSettings().setJavaScriptEnabled(true);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onBackPressed() {
-        if (myWebView.canGoBack()) {
-            myWebView.goBack();
-        }
+        Intent intent = new Intent(MainActivity.this, ServerConfig.class);
+        startActivityForResult(intent, 1);
     }
 
     @Override
@@ -60,6 +54,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState){
         super.onRestoreInstanceState(savedInstanceState);
         myWebView.restoreState(savedInstanceState);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if(resultCode == AppCompatActivity.RESULT_OK){
+                loadServer(data.getStringExtra("server"));
+            }
+        }
     }
 
 }
