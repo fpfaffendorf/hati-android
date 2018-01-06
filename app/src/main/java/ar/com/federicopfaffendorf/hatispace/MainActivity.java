@@ -1,7 +1,5 @@
 package ar.com.federicopfaffendorf.hatispace;
 
-// import android.util.Log;
-
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
@@ -10,10 +8,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 
 public class MainActivity extends AppCompatActivity {
 
     private WebView myWebView;
+    private ProgressDialog myProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +27,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadServer(String server) {
-        final ProgressDialog pd = ProgressDialog.show(this, "", "Connecting to server ...",true);
+        myProgressDialog = ProgressDialog.show(
+                this,
+                "",
+                "Connecting to server ...",
+                true,
+                true,
+                new DialogInterface.OnCancelListener(){
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        myWebView.stopLoading();
+                        onBackPressed();
+                    }
+                });
+        myProgressDialog.setCanceledOnTouchOutside(false);
         myWebView.setWebViewClient(new WebViewClient(){
             @Override
             public void onPageFinished(WebView view, String url) {
-                if(pd!=null && pd.isShowing()) pd.dismiss();
+                if ((myProgressDialog != null) && (myProgressDialog.isShowing())) myProgressDialog.dismiss();
             }
         });
         myWebView.loadUrl(server);

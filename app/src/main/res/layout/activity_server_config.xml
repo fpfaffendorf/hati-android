@@ -6,36 +6,59 @@
     android:layout_height="match_parent"
     tools:context="ar.com.federicopfaffendorf.hatispace.ServerConfig">
 
-    <LinearLayout
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:fillViewport="true"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp"
-        android:layout_margin="20dp"
-        >
+        android:layout_height="fill_parent" >
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Server URL" />
+            android:layout_margin="20dp"
+            android:fillViewport="true"
+            android:orientation="vertical"
+            tools:layout_editor_absoluteX="53dp"
+            tools:layout_editor_absoluteY="122dp">
 
-        <EditText
-            android:id="@+id/editText2"
-            android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/serverURL" />
+
+            <EditText
+                android:id="@+id/editText2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textWebEmailAddress"
+                android:text="" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="connectClick"
+                android:text="@string/connectToServer" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textWebEmailAddress"
-            android:text="" />
+            android:layout_alignParentBottom="true"
+            android:layout_margin="20dp"
+            >
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="connectClick"
-            android:text="Connect to server ..." />
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/aboutText"
+                android:textAlignment="textEnd" />
 
-    </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
 </android.support.constraint.ConstraintLayout>

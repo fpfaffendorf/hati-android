@@ -23,7 +23,7 @@
         </activity>
         <activity
             android:name=".ServerConfig"
-            android:label="Server config">
+            android:label="@string/serverConfig">
 
         </activity>
     </application>
